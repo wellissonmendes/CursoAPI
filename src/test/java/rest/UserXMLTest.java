@@ -34,6 +34,7 @@ public class UserXMLTest {
         reqBuilder.log(LogDetail.ALL);
         reqSpec = reqBuilder.build();
 
+
         ResponseSpecBuilder resBuilder = new ResponseSpecBuilder();
         resBuilder.expectStatusCode(200);
         resSpec = resBuilder.build();
