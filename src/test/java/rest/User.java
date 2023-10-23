@@ -1,10 +1,20 @@
 package rest;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User {
 
     private String name;
     private Integer age;
     private Double salary;
+
+    public User(){
+
+    }
 
     public User(Long id) {
         this.id = id;

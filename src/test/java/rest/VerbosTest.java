@@ -70,6 +70,26 @@ public class VerbosTest {
     }
 
 
+
+    @Test
+    public void deveSalvarUsuarioComXMLUsandoXML() {
+        User user = new User("Usuario XML", 40, 23.6);
+
+        given()
+                .log().all()
+                .contentType(ContentType.XML)
+                .body(user)
+                .when()
+                .post("https://restapi.wcaquino.me/usersXML")
+                .then()
+                .log().all()
+                .statusCode(201)
+                .body("user.id", Matchers.is(notNullValue()))
+                .body("user.name", Matchers.is("Usuario XML"))
+                .body("user.age", Matchers.is("40"))
+        ;
+    }
+
     @Test
     public void deveAlterarUsuario() {
 
