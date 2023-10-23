@@ -70,7 +70,6 @@ public class VerbosTest {
     }
 
 
-
     @Test
     public void deveSalvarUsuarioComXMLUsandoXML() {
         User user = new User("Usuario XML", 40, 23.6);
@@ -88,6 +87,26 @@ public class VerbosTest {
                 .body("user.name", Matchers.is("Usuario XML"))
                 .body("user.age", Matchers.is("40"))
         ;
+    }
+
+    @Test
+    public void deveDeserializarSalvarUsuarioComXMLUsandoXML() {
+        User user = new User("Usuario XML", 40, 23.6);
+
+        User usuarioInserido = given()
+                .log().all()
+                .contentType(ContentType.XML)
+                .body(user)
+                .when()
+                .post("https://restapi.wcaquino.me/usersXML")
+                .then()
+                .log().all()
+                .statusCode(201)
+                .extract().body().as(User.class);
+
+        Assert.assertThat(usuarioInserido.getId(), notNullValue());
+        Assert.assertThat(usuarioInserido.getName(), is("Usuario XML"));
+        Assert.assertThat(usuarioInserido.getAge(), is(40));
     }
 
     @Test
@@ -220,6 +239,7 @@ public class VerbosTest {
                 .body("age", Matchers.is(35))
         ;
     }
+
     @Test
     public void deveDesserializarUsuarioSalvarObjeto() {
         User user = new User("Usuario deserializado", 35, 15.5);
@@ -233,8 +253,7 @@ public class VerbosTest {
                 .then()
                 .log().all()
                 .statusCode(201)
-                .extract().body().as(User.class)
-        ;
+                .extract().body().as(User.class);
 
         System.out.println(usuarioInserido);
         Assert.assertEquals("Usuario deserializado", usuarioInserido.getName());
