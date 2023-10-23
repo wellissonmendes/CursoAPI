@@ -6,6 +6,20 @@ public class User {
     private Integer age;
     private Double salary;
 
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    private Long id;
+
     public User(String name, Integer age,Double salary) {
         this.name = name;
         this.age = age;
@@ -34,5 +48,15 @@ public class User {
 
     public void setSalary(Double salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", salary=" + salary +
+                ", id=" + id +
+                '}';
     }
 }

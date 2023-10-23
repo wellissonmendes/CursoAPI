@@ -2,12 +2,15 @@ package rest;
 
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class VerbosTest {
 
@@ -23,7 +26,7 @@ public class VerbosTest {
                 .then()
                 .log().all()
                 .statusCode(201)
-                .body("id", Matchers.is(Matchers.notNullValue()))
+                .body("id", Matchers.is(notNullValue()))
                 .body("name", Matchers.is("Jose"))
                 .body("age", Matchers.is(50))
         ;
@@ -60,7 +63,7 @@ public class VerbosTest {
                 .then()
                 .log().all()
                 .statusCode(201)
-                .body("user.id", Matchers.is(Matchers.notNullValue()))
+                .body("user.id", Matchers.is(notNullValue()))
                 .body("user.name", Matchers.is("Jose"))
                 .body("user.age", Matchers.is("50"))
         ;
@@ -172,7 +175,7 @@ public class VerbosTest {
                 .then()
                 .log().all()
                 .statusCode(201)
-                .body("id", Matchers.is(Matchers.notNullValue()))
+                .body("id", Matchers.is(notNullValue()))
                 .body("name", Matchers.is("Usuario via map"))
                 .body("age", Matchers.is(25))
         ;
@@ -192,12 +195,32 @@ public class VerbosTest {
                 .then()
                 .log().all()
                 .statusCode(201)
-                .body("id", Matchers.is(Matchers.notNullValue()))
+                .body("id", Matchers.is(notNullValue()))
                 .body("name", Matchers.is("Usuario via objeto"))
                 .body("age", Matchers.is(35))
         ;
     }
+    @Test
+    public void deveDesserializarUsuarioSalvarObjeto() {
+        User user = new User("Usuario deserializado", 35, 15.5);
 
+        User usuarioInserido = given()
+                .log().all()
+                .contentType("application/json")
+                .body(user)
+                .when()
+                .post("https://restapi.wcaquino.me/users")
+                .then()
+                .log().all()
+                .statusCode(201)
+                .extract().body().as(User.class)
+        ;
+
+        System.out.println(usuarioInserido);
+        Assert.assertEquals("Usuario deserializado", usuarioInserido.getName());
+        Assert.assertThat(usuarioInserido.getId(), notNullValue());
+        Assert.assertThat(usuarioInserido.getAge(), is(35));
+    }
 
 
 }
