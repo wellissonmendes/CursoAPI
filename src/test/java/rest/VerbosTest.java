@@ -1,5 +1,6 @@
 package rest;
 
+import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -41,6 +42,25 @@ public class VerbosTest {
                 .body("error",Matchers.is("Name é um atributo obrigatório"))
 
 ;
+    }
+
+
+    @Test
+    public void deveSalvarUsuarioComXML() {
+
+        given()
+                .log().all()
+                .contentType(ContentType.XML)
+                .body("<user> <name>Jose</name> <age>50</age> </user>")
+                .when()
+                .post("https://restapi.wcaquino.me/usersXML")
+                .then()
+                .log().all()
+                .statusCode(201)
+                .body("user.id", Matchers.is(Matchers.notNullValue()))
+                .body("user.name", Matchers.is("Jose"))
+                .body("user.age", Matchers.is("50"))
+        ;
     }
 }
 
