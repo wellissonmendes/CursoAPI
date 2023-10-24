@@ -1,7 +1,6 @@
 package rest;
 
 import io.restassured.http.ContentType;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
@@ -28,4 +27,5 @@ public class HTML {
 
         ;
     }
+
 }
