@@ -2,9 +2,10 @@ package rest;
 
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
+import java.io.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -12,8 +13,7 @@ import static org.hamcrest.Matchers.*;
 public class FileTest {
 
     @Test
-    public void deveObrigarEnvioArquivo()
-    {
+    public void deveObrigarEnvioArquivo() {
 
         given()
                 .log().all()
@@ -30,10 +30,8 @@ public class FileTest {
     }
 
 
-
     @Test
-    public void deveFazerUploadDoArquivo()
-    {
+    public void deveFazerUploadDoArquivo() {
 
         given()
                 .log().all()
@@ -53,8 +51,7 @@ public class FileTest {
 
 
     @Test
-    public void naoDeveFazerUploadDoArquivoGrande()
-    {
+    public void naoDeveFazerUploadDoArquivoGrande() {
 
         given()
                 .log().all()
@@ -72,9 +69,28 @@ public class FileTest {
     }
 
 
+    @Test
+    public void deveBaixarArquivo() throws IOException {
+
+        byte[] image = given()
+                .log().all()
+                .when()
+                .get("http://restapi.wcaquino.me/download")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract().asByteArray();
+
+        File imagem = new File("src/test/resources/file.jpg");
+        OutputStream out = new FileOutputStream(imagem);
+        out.write(image);
+        out.close();
+
+        System.out.println(imagem.length());
+        Assert.assertThat(imagem.length(), lessThan(100000L));
 
 
-
+    }
 
 
 }
