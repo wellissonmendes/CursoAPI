@@ -52,6 +52,25 @@ public class FileTest {
     }
 
 
+    @Test
+    public void naoDeveFazerUploadDoArquivoGrande()
+    {
+
+        given()
+                .log().all()
+                .multiPart("arquivo", new File("src/test/resources/maiorQue5.pdf"))
+                .when()
+                .post("http://restapi.wcaquino.me/upload")
+                .then()
+                .log().all()
+                .time(lessThan(5000L))
+                .statusCode(413)
+
+        ;
+
+
+    }
+
 
 
 
