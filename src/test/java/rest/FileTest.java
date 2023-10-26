@@ -23,10 +23,7 @@ public class FileTest {
                 .log().all()
                 .statusCode(404)
                 .body("error", is("Arquivo não enviado"))
-
         ;
-
-
     }
 
 
@@ -42,11 +39,7 @@ public class FileTest {
                 .log().all()
                 .statusCode(200)
                 .body("name", is("users.pdf"))
-
-
         ;
-
-
     }
 
 
@@ -62,10 +55,7 @@ public class FileTest {
                 .log().all()
                 .time(lessThan(5000L))
                 .statusCode(413)
-
         ;
-
-
     }
 
 
@@ -88,9 +78,5 @@ public class FileTest {
 
         System.out.println(imagem.length());
         Assert.assertThat(imagem.length(), lessThan(100000L));
-
-
     }
-
-
 }
