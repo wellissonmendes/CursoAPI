@@ -5,6 +5,9 @@ import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
@@ -109,5 +112,38 @@ public class AuthTest {
                 .body("status", is("logado"))
         ;
 
+    }
+
+
+    @Test
+    public void deveFazerAutenticacaoComTokenJMT() {
+        Map<String, String> login = new HashMap<String, String>();
+
+        login.put("email", "wellisson.mendes@gmail.com");
+        login.put("senha", "123456");
+        String token = given()
+                .body(login)
+                .contentType(ContentType.JSON)
+                .log().all()
+                .when()
+                .post("https://barrigarest.wcaquino.me/signin")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract().path("token")
+
+        ;
+//Obter contas
+        given()
+
+                .log().all()
+                .header("Authorization", "JWT " + token)
+                .when()
+                .get("https://barrigarest.wcaquino.me/contas")
+                .then()
+                .log().all()
+                .statusCode(200)
+
+                ;
     }
 }
