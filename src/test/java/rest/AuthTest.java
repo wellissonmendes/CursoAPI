@@ -1,6 +1,7 @@
 package rest;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -52,5 +53,61 @@ public class AuthTest {
     }
 
 
+    @Test
+    public void naoDeveAcessarSemSenha() {
+        given()
+                .log().all()
+                .when()
+                .get("https://restapi.wcaquino.me/basicauth")
+                .then()
+                .log().all()
+                .statusCode(401)
+        ;
 
+    }
+
+
+    @Test
+    public void deveAcessarComSenha() {
+        given()
+                .log().all()
+                .when()
+                .get("https://admin:senha@restapi.wcaquino.me/basicauth")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("status", is("logado"))
+        ;
+
+    }
+
+    @Test
+    public void deveAcessarComSenha2() {
+        given()
+                .log().all()
+                .auth().basic("admin", "senha")
+                .when()
+                .get("https://restapi.wcaquino.me/basicauth")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("status", is("logado"))
+        ;
+
+    }
+
+    @Test
+    public void deveAcessarComSenhaChallenge() {
+        given()
+                .log().all()
+                .auth().preemptive().basic("admin", "senha")
+                .when()
+                .get("https://restapi.wcaquino.me/basicauth2")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("status", is("logado"))
+        ;
+
+    }
 }
